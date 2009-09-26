@@ -12,4 +12,4 @@ module JbossCache
   class JbossCacheError < RuntimeError; end
 end
 
-require 'jboss_cache/java'
+require File.join(File.dirname(__FILE__), %w[jboss_cache java])

@@ -3,4 +3,5 @@ $:.unshift(File.dirname(__FILE__)) unless
 
 if defined?(JRUBY_VERSION)
   require 'lib/active_support/cache/jboss_cache_store'
+  require 'lib/active_support/cache/compressed_jboss_cache_store'
 end

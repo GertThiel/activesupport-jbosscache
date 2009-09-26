@@ -7,7 +7,7 @@ module ActiveSupport
 
     class JbossCacheStore < Store
 
-      VERSION = '0.1.0'
+      VERSION = '0.1.1'
 
       include_class "org.jboss.cache.Cache"
       include_class "org.jboss.cache.CacheFactory"
@@ -21,9 +21,7 @@ module ActiveSupport
 
       def read(key, options = nil)
         super
-        marshalled_bytes = @node.get(key)
-        value = Marshal.load( String.from_java_bytes( marshalled_bytes ) ) rescue nil
-        value
+        safeRead(key, options)
       rescue JbossCacheError => e
         logger.error("JbossCacheError (#{e}): #{e.message}")
         false
@@ -31,13 +29,7 @@ module ActiveSupport
 
       def write(key, value, options = {})
         super
-        marshalled_string = Marshal.dump(value)
-        marshalled_bytes = marshalled_string.to_java_bytes
-        @node.put(key, marshalled_bytes)
-        true
-      rescue TypeError => e
-        logger.error("TypeError (#{e}): #{e.message}")
-        false
+        safeWrite(key, value, options)
       rescue JbossCacheError => e
         logger.error("JbossCacheError (#{e}): #{e.message}")
         false
@@ -70,6 +62,23 @@ module ActiveSupport
       def keys
         @node.getKeys().to_a
       end
+
+
+      private
+
+        def safeRead(key, options = nil)
+          Marshal.load( String.from_java_bytes( @node.get(key) ) )
+        rescue
+          nil
+        end
+
+        def safeWrite(key, value, options = nil)
+          @node.put(key, Marshal.dump(value).to_java_bytes )
+          true
+        rescue TypeError => e
+          logger.error("TypeError (#{e}): #{e.message}")
+          false
+        end
 
     end
   end

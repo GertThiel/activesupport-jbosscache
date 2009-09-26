@@ -1,20 +1,20 @@
-require File.join(File.dirname(__FILE__), %w[jboss_cache_store_spec_helper])
+require File.join(File.dirname(__FILE__), %w[compressed_jboss_cache_store_spec_helper])
 
-describe ActiveSupport::Cache::JbossCacheStore do
+describe ActiveSupport::Cache::CompressedJbossCacheStore do
 
   before :all do
-    @store = ActiveSupport::Cache::JbossCacheStore.new()
+    @store = ActiveSupport::Cache::CompressedJbossCacheStore.new()
   end
 
   before :each do
   end
 
   it "should be the corrent version" do
-    ActiveSupport::Cache::JbossCacheStore::VERSION.should eql('0.1.1')
+    ActiveSupport::Cache::CompressedJbossCacheStore::VERSION.should eql('0.1.1')
   end
 
   it "should initialize correctly" do
-    @store.class.should == ActiveSupport::Cache::JbossCacheStore
+    @store.class.should == ActiveSupport::Cache::CompressedJbossCacheStore
   end
 
   it "should read exactly the same string which was written to the cache" do

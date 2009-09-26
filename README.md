@@ -36,13 +36,29 @@ This package can be installed like any regular Rails plug-in:
 ActiveSupport::Cache::JbossCacheStore
 -------------------------------------
 
-Either add a line to your config/environment.rb file
+Either add a line to your config/environment.rb file like
 
     config.cache_store = :jboss_cache_store
 
 or create a separate initializer (e.g. config/initializers/cache.rb) with
 
     ActionController::Base.cache_store = :jboss_cache_store
+
+
+ActiveSupport::Cache::CompressedJbossCacheStore
+-----------------------------------------------
+
+The CompressedJbossCacheStore uses ActiveSupport::Gzip to compress the
+cached data. Besides that it behaves exactly as the JbossCacheStore.
+
+If you want to use this store either add a line to your config/environment.rb
+file like
+
+    config.cache_store = :compressed_jboss_cache_store
+
+or create a separate initializer (e.g. config/initializers/cache.rb) with
+
+    ActionController::Base.cache_store = :compressed_jboss_cache_store
 
 
 Test Suite
