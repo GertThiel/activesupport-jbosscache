@@ -3,3 +3,5 @@ require 'spec'
 require 'java'
 
 require File.join(File.dirname(__FILE__), %w[.. lib jboss_cache_store])
+
+require File.join(File.dirname(__FILE__), %w[shared_examples])

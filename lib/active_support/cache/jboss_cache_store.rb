@@ -7,7 +7,7 @@ module ActiveSupport
 
     class JbossCacheStore < Store
 
-      VERSION = '0.1.1'
+      VERSION = '0.1.2'
 
       include_class "org.jboss.cache.Cache"
       include_class "org.jboss.cache.CacheFactory"
