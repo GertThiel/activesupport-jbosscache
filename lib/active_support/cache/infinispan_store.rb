@@ -7,9 +7,9 @@ module ActiveSupport
 
     class InfinispanStore < Store
 
-      VERSION = '0.1.0'
+      VERSION = '0.1.1'
 
-      include_class "java.util.Collections"
+      include_class "java.util.concurrent.TimeUnit"
       include_class "org.infinispan.CacheException"
       include_class "org.infinispan.manager.DefaultCacheManager"
 
@@ -36,7 +36,7 @@ module ActiveSupport
 
       def delete(key, options = nil)
         super
-        @node.remove(key)
+        @node.removeAsync(key)
       rescue CacheException => e
         logger.error("InfinispanError (#{e}): #{e.message}")
         false
@@ -55,11 +55,24 @@ module ActiveSupport
       end
 
 
-      # These methods aren't available in other AS::Stores.
-      # Maybe these should be declared to be private?
+      # These methods aren't available in every AS::Store:
+
+      def read_multi(*keys)
+        keys.flatten.inject({}) do |results, key|
+          if (value = read(key))
+            results[key] = value
+          end
+          results
+        end
+      end
 
       def keys
         @cache.keySet().to_a
+      end
+
+      def clear
+        @cache.clearAsync()
+        true
       end
 
 
@@ -72,7 +85,10 @@ module ActiveSupport
         end
 
         def safeWrite(key, value, options = nil)
-          @cache.putAsync(key, Marshal.dump(value).to_java_bytes )
+          putMethod = options && options[:unless_exist] ? :putIfAbsentAsync : :putAsync
+
+          options && options[:expires_in] ? @cache.send(putMethod, key, Marshal.dump(value).to_java_bytes, expires_in(options).to_i, java.util.concurrent.TimeUnit::SECONDS) \
+                                          : @cache.send(putMethod, key, Marshal.dump(value).to_java_bytes)
           true
         rescue TypeError => e
           logger.error("TypeError (#{e}): #{e.message}")
