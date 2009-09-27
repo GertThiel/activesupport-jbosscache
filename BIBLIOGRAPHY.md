@@ -11,6 +11,12 @@ ActiveSupport::Cache::Store
  * http://github.com/denen99/activesupport-gemfirecache/blob/master/lib/active_support/cache/gemfire_cache_store.rb
 
 
+Infinispan
+----------
+
+  * [Weblog](http://infinispan.blogspot.com/)
+
+
 JBoss Cache
 -----------
 
