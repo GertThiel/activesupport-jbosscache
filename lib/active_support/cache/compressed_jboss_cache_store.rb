@@ -11,7 +11,8 @@ module ActiveSupport
         end
 
         def safeWrite(key, value, options = nil)
-          @node.put(key, ActiveSupport::Gzip.compress( Marshal.dump(value) ).to_java_bytes )
+          putMethod = options && options[:unless_exist] ? :putIfAbsent : :put
+          @node.send(putMethod, key, ActiveSupport::Gzip.compress( Marshal.dump(value) ).to_java_bytes )
           true
         rescue TypeError => e
           logger.error("TypeError (#{e}): #{e.message}")

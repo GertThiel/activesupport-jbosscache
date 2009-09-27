@@ -56,11 +56,24 @@ module ActiveSupport
       end
 
 
-      # These methods aren't available in other AS::Stores.
-      # Maybe these should be declared to be private?
+      # These methods aren't available in every AS::Store:
+
+      def read_multi(*keys)
+        keys.flatten.inject({}) do |results, key|
+          if (value = read(key))
+            results[key] = value
+          end
+          results
+        end
+      end
 
       def keys
         @node.getKeys().to_a
+      end
+
+      def clear
+        @node.clearData()
+        true
       end
 
 
@@ -73,7 +86,8 @@ module ActiveSupport
         end
 
         def safeWrite(key, value, options = nil)
-          @node.put(key, Marshal.dump(value).to_java_bytes )
+          putMethod = options && options[:unless_exist] ? :putIfAbsent : :put
+          @node.send(putMethod, key, Marshal.dump(value).to_java_bytes )
           true
         rescue TypeError => e
           logger.error("TypeError (#{e}): #{e.message}")
