@@ -70,6 +70,7 @@ the tests. On the other hand, you don't need the application server.
 A binary JRuby distribution with the activesupport gem installed is enough.
 
     jruby -S spec spec/jboss_cache_store_spec.rb
+    jruby -S spec spec/compressed_jboss_cache_store_spec.rb
 
 <del>The JBoss Cache library is included in this distribution.</del>
 

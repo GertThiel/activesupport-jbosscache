@@ -16,9 +16,16 @@ Infinispan
 
   * [Weblog](http://infinispan.blogspot.com/)
 
+  * [Wiki](http://www.jboss.org/community/wiki/Infinispan)
+
+  * [User guide](http://www.jboss.org/infinispan/user_guide/4-0.html)
+
+  * [API reference](http://infinispan.sourceforge.net/4.0/apidocs/)
 
 JBoss Cache
 -----------
+
+  * [Wiki](http://www.jboss.org/community/wiki/JBossCache)
 
   * [User guide](http://www.jboss.org/file-access/default/members/jbosscache/freezone/docs/3.2.0.GA/userguide_en/html_single/index.html)
 
