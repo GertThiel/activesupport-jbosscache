@@ -77,7 +77,7 @@ A binary JRuby distribution with the activesupport gem installed is enough.
     jruby -S spec spec/infinispan_store_spec.rb
     jruby -S spec spec/compressed_infinispan_store_spec.rb
 
-<del>The Infinispan library is included in this distribution.</del>
+The Infinispan library is included in this distribution.
 
 
 License
