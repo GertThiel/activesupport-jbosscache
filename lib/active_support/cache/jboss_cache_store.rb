@@ -49,7 +49,7 @@ module ActiveSupport
       end
 
 
-      # These methods aren't available in every AS::Store:
+      # These methods aren't available in every AS::Store implementation:
 
       def read_multi(*keys)
         keys.flatten.inject({}) do |results, key|
@@ -62,12 +62,10 @@ module ActiveSupport
 
       def delete_matched(matcher, options = nil)
         super
-        keys.map { |key|
-          delete(key, options) if key =~ matcher
-        }
+        keys.map { |key| delete(key, options) if key =~ matcher }
         true
       rescue CacheException => e
-        logger.error("InfinispanError (#{e}): #{e.message}")
+        logger.error("JbossCacheError (#{e}): #{e.message}")
         false
       end
 
