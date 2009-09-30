@@ -39,7 +39,27 @@ shared_examples_for "a AS::C::Store implementation supporting useful optional me
     @store.clear.should be_true
     @store.write('One', 1).should be_true
     @store.write('Two', 2).should be_true
-    @store.keys.should == ['One', 'Two'].sort
+    @store.keys.sort.should == ['One', 'Two'].sort
+  end
+
+  it "should delete key which match a given regular expression" do
+    @store.clear.should be_true
+    @store.write('A1', 1).should be_true
+    @store.write('A2', 2).should be_true
+    @store.write('A3', 2).should be_true
+    @store.write('B1', 2).should be_true
+    @store.write('B2', 2).should be_true
+    @store.write('B3', 2).should be_true
+    @store.write('C1', 2).should be_true
+    @store.write('C2', 2).should be_true
+    @store.write('C3', 2).should be_true
+    @store.keys.sort.should == ["A1", "A2", "A3", "B1", "B2", "B3", "C1", "C2", "C3"].sort
+    @store.delete_matched(/3/).should be_true
+    @store.keys.sort.should == ["A1", "A2", "B1", "B2", "C1", "C2"].sort
+    @store.delete_matched(/A/).should be_true
+    @store.keys.sort.should == ["B1", "B2", "C1", "C2"].sort
+    @store.delete_matched(/^.$/).should be_true
+    @store.keys.sort.should == ["B1", "B2", "C1", "C2"].sort
   end
 
   it "should remove all cached data if told so" do

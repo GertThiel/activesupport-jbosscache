@@ -43,13 +43,6 @@ module ActiveSupport
         false
       end
 
-      def delete_matched(matcher, options = nil)
-        # don't do any local caching at present, just pass
-        # through and let the error happen
-        super
-        raise "Not supported by JBoss Cache"
-      end
-
       def exist?(key, options = nil)
         super
         keys.include? key
@@ -65,6 +58,17 @@ module ActiveSupport
           end
           results
         end
+      end
+
+      def delete_matched(matcher, options = nil)
+        super
+        keys.map { |key|
+          delete(key, options) if key =~ matcher
+        }
+        true
+      rescue CacheException => e
+        logger.error("InfinispanError (#{e}): #{e.message}")
+        false
       end
 
       def keys
